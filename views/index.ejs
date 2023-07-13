@@ -28,7 +28,6 @@
                 <th>Descripcion</th>
                 <th>Cantidad</th>
                 <th>Precio Unitario</th>
-                <th>Precio Total</th>
               </tr>
             </thead>
             <tbody id="cuerpo-inventario">
@@ -40,40 +39,40 @@
         <section id="section-compra" class="section">
           <h2>Compra</h2>
           <form method="post" action="/compra">
-            <label for="clave-compra">Clave:</label>
-            <input type="text" id="clave-compra" required>
-            <label for="material-compra">Material:</label>
-            <input type="text" id="material-compra" required>
-            <label for="descripcion-compra">Descripción:</label>
-            <input type="text" id="descripcion-compra" required>
-            <label for="cantidad-compra">Cantidad:</label>
-            <input type="number" id="cantidad-compra" required>
-            <label for="precio-compra">Precio Unitario:</label>
-            <input type="number" id="precio-compra" required>
-            <label for="proveedor-compra">Proveedor:</label>
-            <input type="text" id="proveedor-compra" required>
-            <label for="fecha-compra">Fecha:</label>
-            <input type="date" id="fecha-compra" required>
-            <button type="submit">Comprar</button>
+            <label for="clave">Clave:</label>
+            <input type="text" name="clave" required>
+            <label for="material">Material:</label>
+            <input type="text" name="material" required>
+            <label for="descripcion">Descripción:</label>
+            <input type="text" name="descripcion" required>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" name="cantidad" required>
+            <label for="precio">Precio Unitario:</label>
+            <input type="number" name="precio" required>
+            <label for="proveedor">Proveedor:</label>
+            <input type="text" name="proveedor" required>
+            <label for="fecha">Fecha:</label>
+            <input type="date" name="fecha" required>
+            <button type="submit" value="compra">Comprar</button>
           </form>
         </section>
     
         <section id="section-venta" class="section">
           <h2>Venta</h2>
           <form method="post" action="/venta">
-            <label for="clave-venta">Clave:</label>
-            <input type="text" id="clave-venta" required>
-            <label for="material-venta">Material:</label>
-            <input type="text" id="material-venta" required>
-            <label for="cantidad-venta">Cantidad:</label>
-            <input type="number" id="cantidad-venta" required>
-            <label for="precio-venta">Precio Unitario:</label>
-            <input type="number" id="precio-venta" required>
-            <label for="empresa-venta">Cliente a quien se vende:</label>
-            <input type="text" id="empresa-venta" required>
-            <label for="fecha-venta">Fecha:</label>
-            <input type="date" id="fecha-venta" required>
-            <button type="submit">Vender</button>
+            <label for="clave">Clave:</label>
+            <input type="text" id="clave" required>
+            <label for="material">Material:</label>
+            <input type="text" id="material" required>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" required>
+            <label for="precio">Precio Unitario:</label>
+            <input type="number" id="precio" required>
+            <label for="empresa">Cliente a quien se vende:</label>
+            <input type="text" id="empresa" required>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required>
+            <button type="submit" value="venta">Vender</button>
           </form>
         </section>
     
@@ -107,7 +106,7 @@
     <body>
 
         <div class="container">
-            <h1 class="mt-5 mb-5 text-center text-primary"><b>Login System in Node.js Express</b></h1>
+            <h1 class="mt-5 mb-5 text-center text-primary"><b>Iniciar sesion</b></h1>
 
             <div class="row mt-5">
                 <div class="col-md-3">&nbsp;</div>
@@ -117,16 +116,17 @@
                         <div class="card-body">
                             <form method="post" action="/login">
                                 <div class="mb-3">
-                                    <label>Email Address</label>
+                                    <label> Usuario</label>
                                     <input type="text" name="Usuario" class="form-control" />
                                 </div>
                                 <div class="mb-3">
-                                    <label>Password</label>
+                                    <label>Contraseña</label>
                                     <input type="password" name="Contraseña" class="form-control" />
                                 </div>
                                 <div class="mb-3">
                                     <input type="submit" class="btn btn-primary" value="Login" />
                                 </div>
+
                             </form>
                         </div>
                     </div>

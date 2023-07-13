@@ -1,4 +1,29 @@
-//asignacion de variables
+function populateInventoryTable() {
+  fetch('/getInventoryData')
+    .then((response) => response.json())
+    .then((inventoryData) => {
+      var inventarioRows = '';
+      for (var i = 0; i < inventoryData.length; i++) {
+        var row = `<tr>
+                    <td>${inventoryData[i].Id}</td>
+                    <td>${inventoryData[i].Material}</td>
+                    <td>${inventoryData[i].Descripcion}</td>
+                    <td>${inventoryData[i].Cantidad}</td>
+                    <td>${inventoryData[i].PrecioUnitario}</td>
+                  </tr>`;
+        inventarioRows += row;
+      }
+
+      var cuerpoInventario = document.getElementById('cuerpo-inventario');
+      cuerpoInventario.innerHTML = inventarioRows;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+window.addEventListener('DOMContentLoaded', populateInventoryTable);
+
 const inventario = [];
 const historialCompras = [];
 const historialVentas = [];
@@ -20,7 +45,6 @@ const btnDescargarVentas = document.getElementById('btn-descargar-ventas');
 const historialComprasContainer = document.getElementById('historial-compras-container');
 const historialVentasContainer = document.getElementById('historial-ventas-container');
 
-//botones del display
 btnInventario.addEventListener('click', function() {
   ocultarSecciones();
   document.getElementById('section-inventario').style.display = 'block';
@@ -70,7 +94,6 @@ btnHistorialVentas.addEventListener('click', function() {
   }
 });
 
-//from de compra
 formCompra.addEventListener('submit', function(event) {
   event.preventDefault();
 
@@ -116,8 +139,6 @@ formCompra.addEventListener('submit', function(event) {
   formCompra.reset();
 });
 
-
-//form venta
 formVenta.addEventListener('submit', function(event) {
   event.preventDefault();
 

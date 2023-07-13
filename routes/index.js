@@ -8,6 +8,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express', session : req.session });
 });
 
+router.get('/getInventoryData', function(req, res, next) {
+  getInventario = `SELECT * FROM material`
+  database.query(getInventario, function(error, inventoryData) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Ocurrio un error.' });
+    } else {
+
+      res.json(inventoryData);
+    }
+  });
+});
+
 router.post('/login', function(request, response, next){
 
     var Usuario = request.body.Usuario;
@@ -16,10 +29,7 @@ router.post('/login', function(request, response, next){
 
     if(Usuario && Contraseña)
     {
-        query = `
-        SELECT * FROM users 
-        WHERE Usuario = "${Usuario}"
-        `;
+        query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
 
         database.query(query, function(error, data){
 
@@ -30,7 +40,6 @@ router.post('/login', function(request, response, next){
                     if(data[count].Contraseña == Contraseña)
                     {
                         request.session.Id = data[count].Id;
-
                         response.redirect("/");
                     }
                     else
@@ -54,7 +63,7 @@ router.post('/login', function(request, response, next){
 
 });
 
-router.get('/logout', function(request, response, next){
+router.post('/logout', function(request, response, next){
 
     request.session.destroy();
 
@@ -62,61 +71,61 @@ router.get('/logout', function(request, response, next){
 
 });
 
-router.get('/compra', function(request, response, next)
+router.post('/compra', function(request, response, next)
 {
-  const clave = request.response('clave-compra').value;
-  const material = request.response('material-compra').value;
-  const descripcion = request.response('descripcion-compra').value;
-  const cantidad = parseInt(request.response('cantidad-compra').value);
-  const precio = parseFloat(request.response('precio-compra').value);
-  const proveedor = request.response('proveedor-compra').value;
-  const fecha = request.response('fecha-compra').value;
-  const precioTotal = cantidad * precio;
+  var clave = request.body.clave;
+  var material = request.body.material;
+  var descripcion = request.body.descripcion;
+  var cantidad = parseInt(request.body.cantidad);
+  var precio = parseFloat(request.body.precio);
+  var proveedor = request.body.proveedor;
+  var fecha = request.body.fecha;
 
-  query = `SELECT * FROM material WHERE Id = "${Clave}"`;
+  query = `SELECT * FROM material WHERE Id = "${clave}"`;
+  database.query(query, function(error, data){
+    if(data.length == 0){
+      addMaterial = `insert into material values ("${clave}", "${material}", "${descripcion}", "${cantidad}", "${precio}")`;
+      addHistorialCompras = `insert into historialcompra (Proveedor, IdMaterial, Fecha) values ("${proveedor}", "${clave}", "${fecha}")`;
+
+      database.query(addMaterial);
+      database.query(addHistorialCompras);
+
+    } else {
+      updateMaterial = `update material set Cantidad = Cantidad + "${cantidad}" where Id = "${clave}"`;
+      addHistorialCompras = `insert into historialcompra (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", "${cantidad}", "${fecha}")`;
+
+      database.query(updateMaterial);
+      database.query(addHistorialCompras);
+    }
+  });
+});
+
+router.post('/venta', function(request, response, next){
+
+  var clave = request.body.clave;
+  var cantidad = parseInt(request.body.cantidad);
+  var proveedor = request.body.proveedor;
+  var fecha = request.body.fecha;
+
+  query = `SELECT * FROM material WHERE Id = "${clave}"`;
   database.query(query, function(error, data){
     if(data.length > 0){
+      response.send('no existe');
+
+    } else {
+      if(data[0].cantidad >= cantidad){
+        updateMaterial = `update material set Cantidad = Cantidad - "${cantidad}" where Id = "${clave}"`;
+        addHistorialVenta = `insert into historialVenta (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", "${cantidad}", "${fecha}")`;
+  
+        database.query(updateMaterial);
+        database.query(addHistorialVenta);j
+      } else {
+        response.send(data[0].cantidad);
+      }
       
     }
-  }
-
-
-  const indiceMaterial = inventario.findIndex(item => item.clave === clave);
-
-  if (indiceMaterial === -1) {
-    // Agregar nuevo material al inventario
-    inventario.push({
-      clave,
-      material,
-      descripcion,
-      cantidad,
-      precio,
-      precioTotal
-    });
-  } else {
-    // Actualizar material existente en el inventario
-    inventario[indiceMaterial].cantidad += cantidad;
-    inventario[indiceMaterial].precioTotal += precioTotal;
-  }
-
-  historialCompras.push(registroCompra);
-
-  actualizarInventario();
-  formCompra.reset();
-  response.redirect("/");
+  });
 
 });
 
-router.get('/venta', function(request, response, next){
-
-  const clave = request.response('clave-venta').value;
-  const material = request.response('material-venta').value;
-  const cantidad = parseInt(request.response('cantidad-venta').value);
-  const precio = parseFloat(request.response('precio-venta').value);
-  const empresa = request.response('empresa-venta').value;
-  const fecha = request.response('fecha-venta').value;
-
-  response.redirect("/");
-
-});
 module.exports = router;
