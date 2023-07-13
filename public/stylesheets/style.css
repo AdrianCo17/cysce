@@ -1,0 +1,110 @@
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+/* Estilos del menú */
+.menu {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.menu button {
+  background-color: #ffa500;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.menu button:hover {
+  background-color: #e69500;
+}
+
+/* Estilos de la tabla de inventario */
+#tabla-inventario {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#tabla-inventario th, #tabla-inventario td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#tabla-inventario th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Estilos de los formularios */
+form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+form input[type="text"],
+form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+form button[type="submit"] {
+  background-color: #ffa500;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+form button[type="submit"]:hover {
+  background-color: #e69500;
+}
+
+/* Estilos del historial de compras y ventas */
+#historial-compras-container div,
+#historial-ventas-container div {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+#historial-compras-container div.low-stock,
+#historial-ventas-container div.low-stock {
+  background-color: #ffdddd;
+}
+
+.poco-inventario {
+  background-color: red;
+}
