@@ -1,3 +1,23 @@
+function cerrarSesion() {
+  // Hacer una petición al servidor para cerrar la sesión
+  fetch('/logout', {
+    method: 'POST',
+  })
+  .then(response => {
+    // Si la respuesta es exitosa, redireccionar al usuario a la página de inicio ("/")
+    if (response.ok) {
+      window.location.href = '/';
+    } else {
+      // Manejar el caso de error si es necesario
+      console.error('Error al cerrar sesión');
+    }
+  })
+  .catch(error => {
+    console.error('Error al cerrar sesión:', error);
+  });
+}
+
+
 function populateInventoryTable() {
   fetch('/getInventoryData')
     .then((response) => response.json())
@@ -10,6 +30,7 @@ function populateInventoryTable() {
                     <td>${inventoryData[i].Descripcion}</td>
                     <td>${inventoryData[i].Cantidad}</td>
                     <td>${inventoryData[i].PrecioUnitario}</td>
+                    <td>${inventoryData[i].PrecioUnitario*inventoryData[i].Cantidad}</td>
                   </tr>`;
         inventarioRows += row;
       }
@@ -22,7 +43,94 @@ function populateInventoryTable() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', populateInventoryTable);
+function populateHistorialComprasTable() {
+  fetch('/getCompras')
+    .then((response) => response.json())
+    .then((comprasData) => {
+      historialCompras.push(...comprasData); // Append the new data to historialCompras
+      var historialComprasRows = '';
+      for (var i = 0; i < comprasData.length; i++) {
+        var row = `<tr>
+                    <td>${comprasData[i].Id}</td>
+                    <td>${comprasData[i].Proveedor}</td>
+                    <td>${comprasData[i].IdMaterial}</td>
+                    <td>${comprasData[i].Cantidad}</td>
+                    <td>${comprasData[i].Fecha}</td>
+                  </tr>`;
+        historialComprasRows += row;
+      }
+
+      var historialComprasContainer = document.getElementById('historial-compras-container');
+      historialComprasContainer.innerHTML = `
+        <table id="tabla-inventario">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Proveedor</th>
+              <th>IdMaterial</th>
+              <th>Cantidad</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${historialComprasRows}
+          </tbody>
+        </table>
+      `;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+function populateHistorialVentasTable() {
+  fetch('/getVentas')
+    .then((response) => response.json())
+    .then((ventasData) => {
+      historialVentas = ventasData;
+      var historialVentasRows = '';
+      for (var i = 0; i < ventasData.length; i++) {
+        var row = `<tr>
+                    <td>${ventasData[i].Id}</td>
+                    <td>${ventasData[i].Proveedor}</td>
+                    <td>${ventasData[i].IdMaterial}</td>
+                    <td>${ventasData[i].Cantidad}</td>
+                    <td>${ventasData[i].Fecha}</td>
+                  </tr>`;
+        historialVentasRows += row;
+      }
+
+      var historialVentasContainer = document.getElementById('historial-ventas-container');
+      historialVentasContainer.innerHTML = `
+        <table id="tabla-ventas">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Proveedor</th>
+              <th>IdMaterial</th>
+              <th>Cantidad</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${historialVentasRows}
+          </tbody>
+        </table>
+      `;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+
+function loadInitialData() {
+  populateInventoryTable();
+  populateHistorialComprasTable();
+  populateHistorialVentasTable();
+}
+
+window.addEventListener('DOMContentLoaded', loadInitialData);
 
 const inventario = [];
 const historialCompras = [];
@@ -63,35 +171,11 @@ btnVenta.addEventListener('click', function() {
 btnHistorialCompras.addEventListener('click', function() {
   ocultarSecciones();
   document.getElementById('section-historial-compras').style.display = 'block';
-
-  historialComprasContainer.innerHTML = '';
-
-  if (historialCompras.length === 0) {
-    historialComprasContainer.textContent = 'No hay registros de compras.';
-  } else {
-    for (let compra of historialCompras) {
-      const registroCompra = document.createElement('div');
-      registroCompra.textContent = `Material: ${compra.material}, Cantidad: ${compra.cantidad}, Precio: $${compra.precio}, Proveedor: ${compra.proveedor}, Fecha: ${compra.fecha}`;
-      historialComprasContainer.appendChild(registroCompra);
-    }
-  }
 });
 
 btnHistorialVentas.addEventListener('click', function() {
   ocultarSecciones();
   document.getElementById('section-historial-ventas').style.display = 'block';
-
-  historialVentasContainer.innerHTML = '';
-
-  if (historialVentas.length === 0) {
-    historialVentasContainer.textContent = 'No hay registros de ventas.';
-  } else {
-    for (let venta of historialVentas) {
-      const registroVenta = document.createElement('div');
-      registroVenta.textContent = `Material: ${venta.material}, Cantidad: ${venta.cantidad}, Precio: $${venta.precio}, Empresa: ${venta.empresa}, Fecha: ${venta.fecha}`;
-      historialVentasContainer.appendChild(registroVenta);
-    }
-  }
 });
 
 formCompra.addEventListener('submit', function(event) {
@@ -225,10 +309,10 @@ function descargarRegistros(nombreArchivo, contenido) {
 }
 
 function generarContenidoCSV(registros) {
-  let contenido = 'Material,Cantidad,Precio,Proveedor,Fecha\n';
+  let contenido = 'Proveedor,IdMaterial,cantidad,Fecha\n';
 
   for (let registro of registros) {
-    contenido += `${registro.material},${registro.cantidad},${registro.precio},${registro.proveedor},${registro.fecha}\n`;
+    contenido += `${registro.proveedor},${registro.IdMaterial},${registro.cantidad},${registro.fecha}\n`;
   }
 
   return contenido;

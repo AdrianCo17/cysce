@@ -97,6 +97,7 @@ router.post('/compra', function(request, response, next)
       database.query(updateMaterial);
       database.query(addHistorialCompras);
     }
+    response.redirect("/");
   });
 });
 
@@ -124,8 +125,35 @@ router.post('/venta', function(request, response, next){
       }
       
     }
+    response.redirect("/");
   });
 
 });
+
+router.get('/getCompras', function(req, res, next) {
+  getCompras = `SELECT * FROM historialcompra`;
+  database.query(getCompras, function(error, comprasData) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Ocurrió un error al obtener los datos de compras.' });
+    } else {
+      res.json(comprasData);
+    }
+  });
+});
+
+
+router.get('/getVentas', function(req, res, next) {
+  getVentas = `SELECT * FROM historialventa`;
+  database.query(getVentas, function(error, ventasData) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Ocurrio un error.' });
+    } else {
+      res.json(ventasData);
+    }
+  });
+});
+
 
 module.exports = router;
