@@ -105,6 +105,7 @@ form button[type="submit"]:hover {
   background-color: #ffdddd;
 }
 
-.poco-inventario {
-  background-color: red;
+.low-inventory {
+  background-color: red;
+  color: white; /* Optionally, you can change the font color for better visibility */
 }
