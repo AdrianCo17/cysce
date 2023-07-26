@@ -140,30 +140,6 @@ function generateCSVContent(data) {
   return csvContent;
 }
 
-btnInventario.addEventListener('click', function() {
-  ocultarSecciones();
-  document.getElementById('section-inventario').style.display = 'block';
-});
-
-btnCompra.addEventListener('click', function() {
-  ocultarSecciones();
-  document.getElementById('section-compra').style.display = 'block';
-});
-
-btnVenta.addEventListener('click', function() {
-  ocultarSecciones();
-  document.getElementById('section-venta').style.display = 'block';
-});
-
-btnHistorialCompras.addEventListener('click', function() {
-  ocultarSecciones();
-  document.getElementById('section-historial-compras').style.display = 'block';
-});
-
-btnHistorialVentas.addEventListener('click', function() {
-  ocultarSecciones();
-  document.getElementById('section-historial-ventas').style.display = 'block';
-});
 
 function loadInitialData() {
   populateInventoryTable();
@@ -193,6 +169,31 @@ const btnDescargarVentas = document.getElementById('btn-descargar-ventas');
 
 const historialComprasContainer = document.getElementById('historial-compras-container');
 const historialVentasContainer = document.getElementById('historial-ventas-container');
+
+btnInventario.addEventListener('click', function() {
+  ocultarSecciones();
+  document.getElementById('section-inventario').style.display = 'block';
+});
+
+btnCompra.addEventListener('click', function() {
+  ocultarSecciones();
+  document.getElementById('section-compra').style.display = 'block';
+});
+
+btnVenta.addEventListener('click', function() {
+  ocultarSecciones();
+  document.getElementById('section-venta').style.display = 'block';
+});
+
+btnHistorialCompras.addEventListener('click', function() {
+  ocultarSecciones();
+  document.getElementById('section-historial-compras').style.display = 'block';
+});
+
+btnHistorialVentas.addEventListener('click', function() {
+  ocultarSecciones();
+  document.getElementById('section-historial-ventas').style.display = 'block';
+});
 
 formCompra.addEventListener('submit', function(event) {
   event.preventDefault();
