@@ -1,11 +1,12 @@
+// Function to check the login status
 function checkLoginStatus() {
   fetch('/checkLoginStatus')
     .then((response) => response.json())
     .then((data) => {
       if (data.loggedIn) {
         // User is logged in
-        // Update UI with logged-in elements (e.g., show the main inventory section)
-        document.getElementById('main-content').style.display = 'block';
+        // Redirect to the main inventory page
+        window.location.href = '/';
       } else {
         // User is not logged in
         // Update UI with login elements (e.g., show the login form)
@@ -16,6 +17,7 @@ function checkLoginStatus() {
       console.error('Error checking login status:', error);
     });
 }
+
 
 // Call the checkLoginStatus function when the DOM is loaded
 window.addEventListener('DOMContentLoaded', checkLoginStatus);

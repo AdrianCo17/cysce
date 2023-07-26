@@ -36,19 +36,20 @@ router.post('/login', function(request, response, next) {
           if (data[count].Contraseña == Contraseña) {
             request.session.Id = data[count].Id;
             response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
-            response.json({ message: 'Login successful', sessionId: data[count].Id });
+            response.json({ message: 'Login successful', loggedIn: true });
           } else {
-            response.json({ message: 'Incorrect Password' });
+            response.json({ message: 'Incorrect Password', loggedIn: false });
           }
         }
       } else {
-        response.json({ message: 'Incorrect Email Address' });
+        response.json({ message: 'Incorrect Email Address', loggedIn: false });
       }
     });
   } else {
-    response.json({ message: 'Please Enter Email Address and Password Details' });
+    response.json({ message: 'Please Enter Email Address and Password Details', loggedIn: false });
   }
 });
+
 
 router.get('/checkLoginStatus', function(req, res, next) {
   if (req.session.Id) {
