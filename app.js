@@ -4,23 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
-const redis = require('redis');
-const RedisStore = require('connect-redis')(session);
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
 
-const redisClient = redis.createClient(process.env.REDIS_URL);
-
-app.use(
-  session({
-    store: new RedisStore({ client: redisClient }),
-    secret: 'webslesson',
-    resave: true,
-    saveUninitialized: true,
-  })
-);
+app.use(session({
+  secret : 'webslesson',
+  resave : true,
+  saveUninitialized : true
+}));
 
 
 // view engine setup
@@ -53,3 +47,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
