@@ -4,14 +4,14 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-  const sessionIdCookie = getCookie('session_id');
-  if (sessionIdCookie) {
-    if (!session.Id) {
-      session.Id = sessionIdCookie;
-    }
+// Check if the session ID cookie exists
+const sessionIdCookie = getCookie('session_id');
+if (sessionIdCookie) {
+  // Set the session Id using the cookie value
+  if (!session.Id) {
+    session.Id = sessionIdCookie;
   }
-});
+}
 
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
