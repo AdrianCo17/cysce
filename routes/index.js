@@ -32,6 +32,7 @@ router.post('/login', function(request, response, next){
         query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
 
         database.query(query, function(error, data){
+          console.log(data);
 
             if(data.length > 0)
             {
@@ -97,41 +98,46 @@ router.post('/compra', function(request, response, next)
       database.query(updateMaterial);
       database.query(addHistorialCompras);
     }
-    response.redirect("/");
+        response.redirect("/");
+
   });
 });
 
 router.post('/venta', function(request, response, next){
+  console.log('Received request body:', request.body);
 
-  var clave = request.body.clave;
-  var cantidad = parseInt(request.body.cantidad);
-  var proveedor = request.body.proveedor;
-  var fecha = request.body.fecha;
+  var clave = request.body.claveventa;
+  var cantidad = parseInt(request.body.cantidadventa);
+  var proveedor = request.body.empresaventa;
+  var fecha = request.body.fechaventa;
 
   query = `SELECT * FROM material WHERE Id = "${clave}"`;
+  console.log(query);
   database.query(query, function(error, data){
-    if(data.length > 0){
+    console.log(data);
+    if(data.length === 0){
       response.send('no existe');
-
     } else {
-      if(data[0].cantidad >= cantidad){
-        updateMaterial = `update material set Cantidad = Cantidad - "${cantidad}" where Id = "${clave}"`;
-        addHistorialVenta = `insert into historialVenta (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", "${cantidad}", "${fecha}")`;
-  
+      // The error should not occur here anymore
+      if(data[0].Cantidad >= cantidad){
+        updateMaterial = `update material set Cantidad = Cantidad - ${cantidad} where Id = "${clave}"`;
+        addHistorialVenta = `insert into historialVenta (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", ${cantidad}, "${fecha}")`;
+
+        console.log(updateMaterial);
+        console.log(addHistorialVenta);
         database.query(updateMaterial);
-        database.query(addHistorialVenta);j
+        database.query(addHistorialVenta);
       } else {
-        response.send(data[0].cantidad);
+        response.send(data[0].Cantidad);
       }
-      
     }
     response.redirect("/");
-  });
 
+  });
 });
 
 router.get('/getCompras', function(req, res, next) {
-  getCompras = `SELECT * FROM historialcompra`;
+  getCompras = `SELECT m.material, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialcompra c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getCompras, function(error, comprasData) {
     if (error) {
       console.log(error);
@@ -144,7 +150,7 @@ router.get('/getCompras', function(req, res, next) {
 
 
 router.get('/getVentas', function(req, res, next) {
-  getVentas = `SELECT * FROM historialventa`;
+  getVentas = `SELECT m.material, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialventa c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getVentas, function(error, ventasData) {
     if (error) {
       console.log(error);

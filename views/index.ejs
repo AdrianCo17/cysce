@@ -62,20 +62,21 @@
         <section id="section-venta" class="section">
           <h2>Venta</h2>
           <form method="post" action="/venta">
-            <label for="clave">Clave:</label>
-            <input type="text" id="clave" required>
-            <label for="material">Material:</label>
-            <input type="text" id="material" required>
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" id="cantidad" required>
-            <label for="precio">Precio Unitario:</label>
-            <input type="number" id="precio" required>
-            <label for="empresa">Cliente a quien se vende:</label>
-            <input type="text" id="empresa" required>
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" required>
+            <label for="claveventa">Clave:</label>
+            <input type="text" name="claveventa" required>
+            <label for="materialventa">Material:</label>
+            <input type="text" name="materialventa" required>
+            <label for="cantidadventa">Cantidad:</label>
+            <input type="number" name="cantidadventa" required>
+            <label for="precioventa">Precio Unitario:</label>
+            <input type="number" name="precioventa" required>
+            <label for="empresaventa">Cliente a quien se vende:</label>
+            <input type="text" name="empresaventa" required>
+            <label for="fechaventa">Fecha:</label>
+            <input type="date" name="fechaventa" required>
             <button type="submit" value="venta">Vender</button>
           </form>
+          
         </section>
     
         <section id="section-historial-compras" class="section">

@@ -51,11 +51,11 @@ function populateHistorialComprasTable() {
       var historialComprasRows = '';
       for (var i = 0; i < comprasData.length; i++) {
         var row = `<tr>
-                    <td>${comprasData[i].Id}</td>
-                    <td>${comprasData[i].Proveedor}</td>
-                    <td>${comprasData[i].IdMaterial}</td>
-                    <td>${comprasData[i].Cantidad}</td>
-                    <td>${comprasData[i].Fecha}</td>
+                    <td>${comprasData[i].material}</td>
+                    <td>${comprasData[i].cantidad}</td>
+                    <td>${comprasData[i].PrecioUnitario}</td>
+                    <td>${comprasData[i].proveedor}</td>
+                    <td>${comprasData[i].fecha}</td>
                   </tr>`;
         historialComprasRows += row;
       }
@@ -65,10 +65,10 @@ function populateHistorialComprasTable() {
         <table id="tabla-inventario">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Proveedor</th>
-              <th>IdMaterial</th>
+              <th>Material</th>
               <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Proveedor</th>
               <th>Fecha</th>
             </tr>
           </thead>
@@ -77,6 +77,11 @@ function populateHistorialComprasTable() {
           </tbody>
         </table>
       `;
+      var btnDescargarCompras = document.getElementById('btn-descargar-compras');
+      btnDescargarCompras.addEventListener('click', function() {
+        const csvContent = generateCSVContent(comprasData);
+        descargarRegistros('compras.csv', csvContent);
+      });
     })
     .catch((error) => {
       console.log(error);
@@ -87,28 +92,27 @@ function populateHistorialVentasTable() {
   fetch('/getVentas')
     .then((response) => response.json())
     .then((ventasData) => {
-      historialVentas = ventasData;
       var historialVentasRows = '';
       for (var i = 0; i < ventasData.length; i++) {
         var row = `<tr>
-                    <td>${ventasData[i].Id}</td>
-                    <td>${ventasData[i].Proveedor}</td>
-                    <td>${ventasData[i].IdMaterial}</td>
-                    <td>${ventasData[i].Cantidad}</td>
-                    <td>${ventasData[i].Fecha}</td>
+                    <td>${ventasData[i].material}</td>
+                    <td>${ventasData[i].cantidad}</td>
+                    <td>${ventasData[i].PrecioUnitario}</td>
+                    <td>${ventasData[i].proveedor}</td>
+                    <td>${ventasData[i].fecha}</td>
                   </tr>`;
         historialVentasRows += row;
       }
 
       var historialVentasContainer = document.getElementById('historial-ventas-container');
       historialVentasContainer.innerHTML = `
-        <table id="tabla-ventas">
+        <table id="tabla-inventario">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Proveedor</th>
-              <th>IdMaterial</th>
+              <th>Material</th>
               <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Proveedor</th>
               <th>Fecha</th>
             </tr>
           </thead>
@@ -117,10 +121,23 @@ function populateHistorialVentasTable() {
           </tbody>
         </table>
       `;
+      var btnDescargarVentas = document.getElementById('btn-descargar-ventas');
+      btnDescargarVentas.addEventListener('click', function() {
+        const csvContent = generateCSVContent(ventasData);
+        descargarRegistros('ventas.csv', csvContent);
+      });
     })
     .catch((error) => {
       console.log(error);
     });
+}
+
+function generateCSVContent(data) {
+  let csvContent = 'Material,Cantidad,Precio Unitario,Proveedor,Fecha\n';
+  data.forEach(item => {
+    csvContent += `${item.material},${item.cantidad},${item.PrecioUnitario},${item.proveedor},${item.fecha}\n`;
+  });
+  return csvContent;
 }
 
 
@@ -232,8 +249,6 @@ formVenta.addEventListener('submit', function(event) {
   const precio = parseFloat(document.getElementById('precio-venta').value);
   const empresa = document.getElementById('empresa-venta').value;
   const fecha = document.getElementById('fecha-venta').value;
-
-  const precioTotal = cantidad * precio;
 
   const registroVenta = {
     material,
