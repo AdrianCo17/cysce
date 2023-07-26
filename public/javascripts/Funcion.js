@@ -197,43 +197,83 @@ const historialVentasContainer = document.getElementById('historial-ventas-conta
 formCompra.addEventListener('submit', function(event) {
   event.preventDefault();
 
-  fetch('/compra', {
-    method: 'POST',
-    body: JSON.stringify(compraData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data.message); // This will print "Purchase successful"
-    console.log(data.newInventoryData);
-    showMessage('Purchase successful!');
-  })
-  .catch(error => {
-    console.error('Error during purchase:', error);
-  });
+  const clave = document.getElementById('clave-compra').value;
+  const material = document.getElementById('material-compra').value;
+  const descripcion = document.getElementById('descripcion-compra').value;
+  const cantidad = parseInt(document.getElementById('cantidad-compra').value);
+  const precio = parseFloat(document.getElementById('precio-compra').value);
+  const proveedor = document.getElementById('proveedor-compra').value;
+  const fecha = document.getElementById('fecha-compra').value;
+
+  const precioTotal = cantidad * precio;
+
+  const registroCompra = {
+    material,
+    cantidad,
+    precio,
+    proveedor,
+    fecha
+  };
+
+  const indiceMaterial = inventario.findIndex(item => item.clave === clave);
+
+  if (indiceMaterial === -1) {
+    // Agregar nuevo material al inventario
+    inventario.push({
+      clave,
+      material,
+      descripcion,
+      cantidad,
+      precio,
+      precioTotal
+    });
+  } else {
+    // Actualizar material existente en el inventario
+    inventario[indiceMaterial].cantidad += cantidad;
+    inventario[indiceMaterial].precioTotal += precioTotal;
+  }
+
+  historialCompras.push(registroCompra);
+
+  actualizarInventario();
+  formCompra.reset();
 });
 
 formVenta.addEventListener('submit', function(event) {
   event.preventDefault();
 
-  fetch('/compra', {
-    method: 'POST',
-    body: JSON.stringify(compraData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data.message); // This will print "Purchase successful"
-    console.log(data.newInventoryData);
-    showMessage('Purchase successful!');
-  })
-  .catch(error => {
-    console.error('Error during purchase:', error);
-  });
+  const clave = document.getElementById('clave-venta').value;
+  const material = document.getElementById('material-venta').value;
+  const cantidad = parseInt(document.getElementById('cantidad-venta').value);
+  const precio = parseFloat(document.getElementById('precio-venta').value);
+  const empresa = document.getElementById('empresa-venta').value;
+  const fecha = document.getElementById('fecha-venta').value;
+
+  const registroVenta = {
+    material,
+    cantidad,
+    precio,
+    empresa,
+    fecha
+  };
+
+  const indiceMaterial = inventario.findIndex(item => item.clave === clave);
+
+  if (indiceMaterial === -1) {
+    alert('No se encontró el material en el inventario.');
+    return;
+  }
+
+  if (cantidad > inventario[indiceMaterial].cantidad) {
+    alert('No hay suficiente cantidad de material en el inventario.');
+    return;
+  }
+
+  inventario[indiceMaterial].cantidad -= cantidad;
+  historialVentas.push(registroVenta);
+
+  actualizarInventario();
+  formVenta.reset();
 });
 
 btnDescargarCompras.addEventListener('click', function() {
