@@ -121,7 +121,7 @@ router.post('/venta', function(request, response, next){
       // The error should not occur here anymore
       if(data[0].Cantidad >= cantidad){
         updateMaterial = `update material set Cantidad = Cantidad - ${cantidad} where Id = "${clave}"`;
-        addHistorialVenta = `insert into historialVenta (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", ${cantidad}, "${fecha}")`;
+        addHistorialVenta = `insert into historialventa (Proveedor, IdMaterial, Cantidad, Fecha) values ("${proveedor}", "${clave}", ${cantidad}, "${fecha}")`;
 
         console.log(updateMaterial);
         console.log(addHistorialVenta);
