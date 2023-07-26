@@ -18,10 +18,6 @@ function checkLoginStatus() {
     });
 }
 
-
-// Call the checkLoginStatus function when the DOM is loaded
-window.addEventListener('DOMContentLoaded', checkLoginStatus);
-
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
   fetch('/logout', {
@@ -206,6 +202,7 @@ function loadInitialData() {
   populateInventoryTable();
   populateHistorialComprasTable();
   populateHistorialVentasTable();
+  checkLoginStatus();
 }
 
 window.addEventListener('DOMContentLoaded', loadInitialData);
