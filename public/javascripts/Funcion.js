@@ -238,6 +238,29 @@ formCompra.addEventListener('submit', function(event) {
 
   actualizarInventario();
   formCompra.reset();
+  fetch('/compra', {
+    method: 'POST',
+    body: JSON.stringify(compraData),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response data
+    console.log(data.message); // This will print "Purchase successful"
+    // Assuming the data returned contains updated inventory data, you can update the UI accordingly
+    console.log(data.newInventoryData);
+    // Show a success message to the user
+    showMessage('Purchase successful!');
+
+    // Optionally, update the UI with new inventory data
+    // updateInventory(data.newInventoryData);
+  })
+  .catch(error => {
+    console.error('Error during purchase:', error);
+    // Handle the error, e.g., show an error message to the user
+  });
 });
 
 formVenta.addEventListener('submit', function(event) {
@@ -275,6 +298,29 @@ formVenta.addEventListener('submit', function(event) {
 
   actualizarInventario();
   formVenta.reset();
+  fetch('/compra', {
+    method: 'POST',
+    body: JSON.stringify(compraData),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response data
+    console.log(data.message); // This will print "Purchase successful"
+    // Assuming the data returned contains updated inventory data, you can update the UI accordingly
+    console.log(data.newInventoryData);
+    // Show a success message to the user
+    showMessage('Purchase successful!');
+
+    // Optionally, update the UI with new inventory data
+    // updateInventory(data.newInventoryData);
+  })
+  .catch(error => {
+    console.error('Error during purchase:', error);
+    // Handle the error, e.g., show an error message to the user
+  });
 });
 
 btnDescargarCompras.addEventListener('click', function() {
