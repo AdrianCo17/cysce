@@ -1,3 +1,19 @@
+fetch('/compra', {
+    method: 'POST',
+    body: JSON.stringify(compraData),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    window.location.href = '/';
+  })
+  .catch(error => {
+    console.error('Error during purchase:', error);
+  });
+});
+
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
   fetch('/logout', {
@@ -314,21 +330,4 @@ function actualizarInventario() {
 
     cuerpoInventario.appendChild(fila);
   }
-}
-
-function descargarRegistros(nombreArchivo, contenido) {
-  const enlaceDescarga = document.createElement('a');
-  enlaceDescarga.href = URL.createObjectURL(new Blob([contenido], { type: 'text/csv' }));
-  enlaceDescarga.download = nombreArchivo;
-  enlaceDescarga.click();
-}
-
-function generarContenidoCSV(registros) {
-  let contenido = 'Proveedor,IdMaterial,cantidad,Fecha\n';
-
-  for (let registro of registros) {
-    contenido += `${registro.proveedor},${registro.IdMaterial},${registro.cantidad},${registro.fecha}\n`;
-  }
-
-  return contenido;
 }
