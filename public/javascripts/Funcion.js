@@ -24,7 +24,8 @@ function populateInventoryTable() {
     .then((inventoryData) => {
       var inventarioRows = '';
       for (var i = 0; i < inventoryData.length; i++) {
-        var row = `<tr>
+        const cantidadClass = inventoryData[i].Cantidad < 10 ? 'poco-inventario' : '';
+        var row = `<tr class="${cantidadClass}">
                     <td>${inventoryData[i].Id}</td>
                     <td>${inventoryData[i].Material}</td>
                     <td>${inventoryData[i].Descripcion}</td>
