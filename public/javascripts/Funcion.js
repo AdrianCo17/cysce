@@ -315,3 +315,20 @@ function actualizarInventario() {
     cuerpoInventario.appendChild(fila);
   }
 }
+
+function descargarRegistros(nombreArchivo, contenido) {
+  const enlaceDescarga = document.createElement('a');
+  enlaceDescarga.href = URL.createObjectURL(new Blob([contenido], { type: 'text/csv' }));
+  enlaceDescarga.download = nombreArchivo;
+  enlaceDescarga.click();
+}
+
+function generarContenidoCSV(registros) {
+  let contenido = 'Proveedor,IdMaterial,cantidad,Fecha\n';
+
+  for (let registro of registros) {
+    contenido += `${registro.proveedor},${registro.IdMaterial},${registro.cantidad},${registro.fecha}\n`;
+  }
+
+  return contenido;
+}
