@@ -1,33 +1,3 @@
-fetch('/compra', {
-    method: 'POST',
-    body: JSON.stringify(compraData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    window.location.href = '/';
-  })
-  .catch(error => {
-    console.error('Error during purchase:', error);
-  });
-
-  fetch('/venta', {
-    method: 'POST',
-    body: JSON.stringify(compraData),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => response.json())
-  .then(data => {
-    window.location.href = '/';
-  })
-  .catch(error => {
-    console.error('Error during purchase:', error);
-  });
-
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
   fetch('/logout', {
