@@ -98,8 +98,6 @@ router.post('/compra', function(request, response, next)
       database.query(updateMaterial);
       database.query(addHistorialCompras);
     }
-    response.status(200).json({ message: 'Purchase successful', newInventoryData: data });
-
   });
 });
 
@@ -131,8 +129,6 @@ router.post('/venta', function(request, response, next){
         response.send(data[0].Cantidad);
       }
     }
-    response.status(200).json({ message: 'Purchase successful', newInventoryData: data });
-
   });
 });
 
