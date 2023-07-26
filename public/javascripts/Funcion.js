@@ -1,3 +1,18 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  const sessionIdCookie = getCookie('session_id');
+  if (sessionIdCookie) {
+    if (!session.Id) {
+      session.Id = sessionIdCookie;
+    }
+  }
+});
+
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
   fetch('/logout', {

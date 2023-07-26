@@ -34,26 +34,20 @@ router.post('/login', function(request, response, next){
         database.query(query, function(error, data){
           console.log(data);
 
-            if(data.length > 0)
-            {
-                for(var count = 0; count < data.length; count++)
-                {
-                    if(data[count].Contraseña == Contraseña)
-                    {
-                        request.session.Id = data[count].Id;
-                        response.redirect("/");
-                    }
-                    else
-                    {
-                        response.send('Incorrect Password');
-                    }
-                }
+          if (data.length > 0) {
+            for (var count = 0; count < data.length; count++) {
+              if (data[count].Contraseña == Contraseña) {
+                request.session.Id = data[count].Id;
+                response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
+                response.redirect("/");
+              } else {
+                response.send('Incorrect Password');
+              }
             }
-            else
-            {
-                response.send('Incorrect Email Address');
-            }
-            response.end();
+          } else {
+            response.send('Incorrect Email Address');
+          }
+          response.end();
         });
     }
     else
