@@ -22,16 +22,24 @@ function populateInventoryTable() {
   fetch('/getInventoryData')
     .then((response) => response.json())
     .then((inventoryData) => {
+      // Filter the data based on the search input
+      const searchInput = document.getElementById('search-material-inventario').value.toLowerCase();
+      const filteredData = inventoryData.filter((item) =>
+        item.Material.toLowerCase().includes(searchInput)
+      );
+
       var inventarioRows = '';
-      for (var i = 0; i < inventoryData.length; i++) {
-        const cantidadClass = inventoryData[i].Cantidad < 10 ? 'low-inventory' : '';
+      for (var i = 0; i < filteredData.length; i++) {
+        // Add a CSS class based on the "Cantidad" value for color change
+        var cantidadClass = filteredData[i].Cantidad < 10 ? 'low-inventory' : '';
+
         var row = `<tr class="${cantidadClass}">
-                    <td>${inventoryData[i].Id}</td>
-                    <td>${inventoryData[i].Material}</td>
-                    <td>${inventoryData[i].Descripcion}</td>
-                    <td>${inventoryData[i].Cantidad}</td>
-                    <td>${inventoryData[i].PrecioUnitario}</td>
-                    <td>${inventoryData[i].PrecioUnitario*inventoryData[i].Cantidad}</td>
+                    <td>${filteredData[i].Id}</td>
+                    <td>${filteredData[i].Material}</td>
+                    <td>${filteredData[i].Descripcion}</td>
+                    <td>${filteredData[i].Cantidad}</td>
+                    <td>${filteredData[i].PrecioUnitario}</td>
+                    <td>${filteredData[i].PrecioUnitario * filteredData[i].Cantidad}</td>
                   </tr>`;
         inventarioRows += row;
       }
@@ -43,6 +51,12 @@ function populateInventoryTable() {
       console.log(error);
     });
 }
+
+const btnSearchInventario = document.getElementById('btn-search-inventario');
+btnSearchInventario.addEventListener('click', function () {
+  populateInventoryTable();
+});
+
 
 function populateHistorialComprasTable() {
   fetch('/getCompras')
@@ -103,14 +117,20 @@ function populateHistorialVentasTable() {
   fetch('/getVentas')
     .then((response) => response.json())
     .then((ventasData) => {
+      // Filter the data based on the search input
+      const searchInput = document.getElementById('search-material-ventas').value.toLowerCase();
+      const filteredData = ventasData.filter((item) =>
+        item.material.toLowerCase().includes(searchInput)
+      );
+
       var historialVentasRows = '';
-      for (var i = 0; i < ventasData.length; i++) {
+      for (var i = 0; i < filteredData.length; i++) {
         var row = `<tr>
-                    <td>${ventasData[i].material}</td>
-                    <td>${ventasData[i].cantidad}</td>
-                    <td>${ventasData[i].PrecioUnitario}</td>
-                    <td>${ventasData[i].proveedor}</td>
-                    <td>${ventasData[i].fecha}</td>
+                    <td>${filteredData[i].material}</td>
+                    <td>${filteredData[i].cantidad}</td>
+                    <td>${filteredData[i].PrecioUnitario}</td>
+                    <td>${filteredData[i].proveedor}</td>
+                    <td>${filteredData[i].fecha}</td>
                   </tr>`;
         historialVentasRows += row;
       }
@@ -133,8 +153,8 @@ function populateHistorialVentasTable() {
         </table>
       `;
       var btnDescargarVentas = document.getElementById('btn-descargar-ventas');
-      btnDescargarVentas.addEventListener('click', function() {
-        const csvContent = generateCSVContent(ventasData);
+      btnDescargarVentas.addEventListener('click', function () {
+        const csvContent = generateCSVContent(filteredData);
         descargarRegistros('ventas.csv', csvContent);
       });
     })
@@ -142,6 +162,12 @@ function populateHistorialVentasTable() {
       console.log(error);
     });
 }
+
+
+const btnSearchVentas = document.getElementById('btn-search-ventas');
+btnSearchVentas.addEventListener('click', function () {
+  populateHistorialVentasTable();
+});
 
 function generateCSVContent(data) {
   let csvContent = 'Material,Cantidad,Precio Unitario,Proveedor,Fecha\n';
