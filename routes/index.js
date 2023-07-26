@@ -29,27 +29,22 @@ router.post('/login', function(request, response, next) {
     query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
 
     database.query(query, function(error, data) {
-      console.log(data);
-
       if (data.length > 0) {
         for (var count = 0; count < data.length; count++) {
           if (data[count].Contraseña == Contraseña) {
             request.session.Id = data[count].Id;
             response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
-            response.json({ message: 'Login successful', loggedIn: true });
-          } else {
-            response.json({ message: 'Incorrect Password', loggedIn: false });
+            response.redirect("/");
+            return; // Return to prevent further response
           }
         }
-      } else {
-        response.json({ message: 'Incorrect Email Address', loggedIn: false });
       }
+      response.send('Incorrect Email Address or Password');
     });
   } else {
-    response.json({ message: 'Please Enter Email Address and Password Details', loggedIn: false });
+    response.send('Please Enter Email Address and Password Details');
   }
 });
-
 
 router.get('/checkLoginStatus', function(req, res, next) {
   if (req.session.Id) {

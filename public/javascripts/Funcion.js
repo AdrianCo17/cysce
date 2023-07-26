@@ -1,23 +1,3 @@
-// Function to check the login status
-function checkLoginStatus() {
-  fetch('/checkLoginStatus')
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.loggedIn) {
-        // User is logged in
-        // Redirect to the main inventory page
-        window.location.href = '/';
-      } else {
-        // User is not logged in
-        // Update UI with login elements (e.g., show the login form)
-        document.getElementById('login-form').style.display = 'block';
-      }
-    })
-    .catch((error) => {
-      console.error('Error checking login status:', error);
-    });
-}
-
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
   fetch('/logout', {
@@ -202,7 +182,6 @@ function loadInitialData() {
   populateInventoryTable();
   populateHistorialComprasTable();
   populateHistorialVentasTable();
-  checkLoginStatus();
 }
 
 window.addEventListener('DOMContentLoaded', loadInitialData);
