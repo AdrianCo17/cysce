@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/getInventoryData', function(req, res, next) {
-  getInventario = `SELECT * FROM material`
+  getInventario = `SELECT * FROM material ORDER BY Cantidad ASC`
   database.query(getInventario, function(error, inventoryData) {
     if (error) {
       console.log(error);

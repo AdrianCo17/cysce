@@ -48,15 +48,19 @@ function populateHistorialComprasTable() {
   fetch('/getCompras')
     .then((response) => response.json())
     .then((comprasData) => {
-      historialCompras.push(...comprasData); // Append the new data to historialCompras
+      const searchInput = document.getElementById('search-material').value.toLowerCase();
+      const filteredData = comprasData.filter((item) =>
+        item.material.toLowerCase().includes(searchInput)
+      );
+
       var historialComprasRows = '';
-      for (var i = 0; i < comprasData.length; i++) {
+      for (var i = 0; i < filteredData.length; i++) {
         var row = `<tr>
-                    <td>${comprasData[i].material}</td>
-                    <td>${comprasData[i].cantidad}</td>
-                    <td>${comprasData[i].PrecioUnitario}</td>
-                    <td>${comprasData[i].proveedor}</td>
-                    <td>${comprasData[i].fecha}</td>
+                    <td>${filteredData[i].material}</td>
+                    <td>${filteredData[i].cantidad}</td>
+                    <td>${filteredData[i].PrecioUnitario}</td>
+                    <td>${filteredData[i].proveedor}</td>
+                    <td>${filteredData[i].fecha}</td>
                   </tr>`;
         historialComprasRows += row;
       }
@@ -79,8 +83,8 @@ function populateHistorialComprasTable() {
         </table>
       `;
       var btnDescargarCompras = document.getElementById('btn-descargar-compras');
-      btnDescargarCompras.addEventListener('click', function() {
-        const csvContent = generateCSVContent(comprasData);
+      btnDescargarCompras.addEventListener('click', function () {
+        const csvContent = generateCSVContent(filteredData);
         descargarRegistros('compras.csv', csvContent);
       });
     })
@@ -88,6 +92,12 @@ function populateHistorialComprasTable() {
       console.log(error);
     });
 }
+
+const btnSearchCompras = document.getElementById('btn-search-compras');
+btnSearchCompras.addEventListener('click', function () {
+  populateHistorialComprasTable();
+});
+
 
 function populateHistorialVentasTable() {
   fetch('/getVentas')
