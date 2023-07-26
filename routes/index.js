@@ -21,41 +21,43 @@ router.get('/getInventoryData', function(req, res, next) {
   });
 });
 
-router.post('/login', function(request, response, next){
+router.post('/login', function(request, response, next) {
+  var Usuario = request.body.Usuario;
+  var Contraseña = request.body.Contraseña;
 
-    var Usuario = request.body.Usuario;
+  if (Usuario && Contraseña) {
+    query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
 
-    var Contraseña = request.body.Contraseña;
+    database.query(query, function(error, data) {
+      console.log(data);
 
-    if(Usuario && Contraseña)
-    {
-        query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
-
-        database.query(query, function(error, data){
-          console.log(data);
-
-          if (data.length > 0) {
-            for (var count = 0; count < data.length; count++) {
-              if (data[count].Contraseña == Contraseña) {
-                request.session.Id = data[count].Id;
-                response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
-                response.redirect("/");
-              } else {
-                response.send('Incorrect Password');
-              }
-            }
+      if (data.length > 0) {
+        for (var count = 0; count < data.length; count++) {
+          if (data[count].Contraseña == Contraseña) {
+            request.session.Id = data[count].Id;
+            response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
+            response.json({ message: 'Login successful', sessionId: data[count].Id });
           } else {
-            response.send('Incorrect Email Address');
+            response.json({ message: 'Incorrect Password' });
           }
-          response.end();
-        });
-    }
-    else
-    {
-        response.send('Please Enter Email Address and Password Details');
-        response.end();
-    }
+        }
+      } else {
+        response.json({ message: 'Incorrect Email Address' });
+      }
+    });
+  } else {
+    response.json({ message: 'Please Enter Email Address and Password Details' });
+  }
+});
 
+router.get('/checkLoginStatus', function(req, res, next) {
+  if (req.session.Id) {
+    // User is logged in
+    res.json({ loggedIn: true });
+  } else {
+    // User is not logged in
+    res.json({ loggedIn: false });
+  }
 });
 
 router.post('/logout', function(request, response, next){

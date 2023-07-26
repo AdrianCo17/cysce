@@ -1,17 +1,24 @@
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
+function checkLoginStatus() {
+  fetch('/checkLoginStatus')
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.loggedIn) {
+        // User is logged in
+        // Update UI with logged-in elements (e.g., show the main inventory section)
+        document.getElementById('main-content').style.display = 'block';
+      } else {
+        // User is not logged in
+        // Update UI with login elements (e.g., show the login form)
+        document.getElementById('login-form').style.display = 'block';
+      }
+    })
+    .catch((error) => {
+      console.error('Error checking login status:', error);
+    });
 }
 
-// Check if the session ID cookie exists
-const sessionIdCookie = getCookie('session_id');
-if (sessionIdCookie) {
-  // Set the session Id using the cookie value
-  if (!session.Id) {
-    session.Id = sessionIdCookie;
-  }
-}
+// Call the checkLoginStatus function when the DOM is loaded
+window.addEventListener('DOMContentLoaded', checkLoginStatus);
 
 function cerrarSesion() {
   // Hacer una petición al servidor para cerrar la sesión
