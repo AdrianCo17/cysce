@@ -98,7 +98,7 @@ router.post('/compra', function(request, response, next)
       database.query(updateMaterial);
       database.query(addHistorialCompras);
     }
-        response.redirect("/");
+    response.status(200).json({ message: 'Purchase successful', newInventoryData: data });
 
   });
 });
