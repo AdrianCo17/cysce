@@ -131,7 +131,7 @@ router.post('/venta', function(request, response, next){
         response.send(data[0].Cantidad);
       }
     }
-    response.redirect("/");
+    response.status(200).json({ message: 'Purchase successful', newInventoryData: data });
 
   });
 });
