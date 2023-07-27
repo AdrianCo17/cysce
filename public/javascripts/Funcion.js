@@ -17,19 +17,29 @@ function cerrarSesion() {
   });
 }
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 
 function populateInventoryTable() {
   fetch('/getInventoryData')
     .then((response) => response.json())
     .then((inventoryData) => {
+      // Filter the data based on the search input
       const searchInput = document.getElementById('search-material-inventario').value.toLowerCase();
       const filteredData = inventoryData.filter((item) =>
-        item.material.toLowerCase().includes(searchInput) ||
-        item.descripcion.toLowerCase().includes(searchInput)
+        item.Material.toLowerCase().includes(searchInput)
       );
 
       var inventarioRows = '';
       for (var i = 0; i < filteredData.length; i++) {
+        // Add a CSS class based on the "Cantidad" value for color change
         var cantidadClass = filteredData[i].Cantidad < 10 ? 'low-inventory' : '';
 
         var row = `<tr class="${cantidadClass}">
@@ -69,13 +79,14 @@ function populateHistorialComprasTable() {
 
       var historialComprasRows = '';
       for (var i = 0; i < filteredData.length; i++) {
+        var formattedDate = formatDate(filteredData[i].fecha);
         var row = `<tr>
                     <td>${filteredData[i].material}</td>
                     <td>${filteredData[i].descripcion}</td>
                     <td>${filteredData[i].cantidad}</td>
                     <td>${filteredData[i].PrecioUnitario}</td>
                     <td>${filteredData[i].proveedor}</td>
-                    <td>${filteredData[i].fecha}</td>
+                    <td>${formattedDate}</td>
                   </tr>`;
         historialComprasRows += row;
       }
@@ -127,13 +138,14 @@ function populateHistorialVentasTable() {
 
       var historialVentasRows = '';
       for (var i = 0; i < filteredData.length; i++) {
+        var formattedDate = formatDate(filteredData[i].fecha);
         var row = `<tr>
                     <td>${filteredData[i].material}</td>
                     <td>${filteredData[i].descripcion}</td>
                     <td>${filteredData[i].cantidad}</td>
                     <td>${filteredData[i].PrecioUnitario}</td>
                     <td>${filteredData[i].proveedor}</td>
-                    <td>${filteredData[i].fecha}</td>
+                    <td>${formattedDate}</td>
                   </tr>`;
         historialVentasRows += row;
       }
