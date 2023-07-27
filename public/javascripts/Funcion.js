@@ -22,15 +22,14 @@ function populateInventoryTable() {
   fetch('/getInventoryData')
     .then((response) => response.json())
     .then((inventoryData) => {
-      // Filter the data based on the search input
       const searchInput = document.getElementById('search-material-inventario').value.toLowerCase();
       const filteredData = inventoryData.filter((item) =>
-        item.Material.toLowerCase().includes(searchInput)
+        item.material.toLowerCase().includes(searchInput) ||
+        item.descripcion.toLowerCase().includes(searchInput)
       );
 
       var inventarioRows = '';
       for (var i = 0; i < filteredData.length; i++) {
-        // Add a CSS class based on the "Cantidad" value for color change
         var cantidadClass = filteredData[i].Cantidad < 10 ? 'low-inventory' : '';
 
         var row = `<tr class="${cantidadClass}">
@@ -64,7 +63,8 @@ function populateHistorialComprasTable() {
     .then((comprasData) => {
       const searchInput = document.getElementById('search-material').value.toLowerCase();
       const filteredData = comprasData.filter((item) =>
-        item.material.toLowerCase().includes(searchInput)
+        item.material.toLowerCase().includes(searchInput) ||
+        item.descripcion.toLowerCase().includes(searchInput)
       );
 
       var historialComprasRows = '';
@@ -119,10 +119,10 @@ function populateHistorialVentasTable() {
   fetch('/getVentas')
     .then((response) => response.json())
     .then((ventasData) => {
-      // Filter the data based on the search input
       const searchInput = document.getElementById('search-material-ventas').value.toLowerCase();
       const filteredData = ventasData.filter((item) =>
-        item.material.toLowerCase().includes(searchInput)
+        item.material.toLowerCase().includes(searchInput) ||
+        item.descripcion.toLowerCase().includes(searchInput)
       );
 
       var historialVentasRows = '';
@@ -186,6 +186,8 @@ function loadInitialData() {
   populateInventoryTable();
   populateHistorialComprasTable();
   populateHistorialVentasTable();
+  ocultarSecciones();
+  document.getElementById('section-inventario').style.display = 'block';
 }
 
 window.addEventListener('DOMContentLoaded', loadInitialData);
