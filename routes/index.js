@@ -138,7 +138,7 @@ router.post('/venta', function(request, response, next){
 });
 
 router.get('/getCompras', function(req, res, next) {
-  getCompras = `SELECT m.material, m.descrpicion, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialcompra c LEFT JOIN material m on m.Id = c.IdMaterial; `;
+  getCompras = `SELECT m.material m.Descripcion,, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialcompra c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getCompras, function(error, comprasData) {
     if (error) {
       console.log(error);
@@ -151,7 +151,7 @@ router.get('/getCompras', function(req, res, next) {
 
 
 router.get('/getVentas', function(req, res, next) {
-  getVentas = `SELECT m.material, m.descrpicion, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialventa c LEFT JOIN material m on m.Id = c.IdMaterial; `;
+  getVentas = `SELECT m.material, m.Descripcion,, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialventa c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getVentas, function(error, ventasData) {
     if (error) {
       console.log(error);
