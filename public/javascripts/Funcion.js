@@ -71,6 +71,7 @@ function populateHistorialComprasTable() {
       for (var i = 0; i < filteredData.length; i++) {
         var row = `<tr>
                     <td>${filteredData[i].material}</td>
+                    <td>${filteredData[i].descripcion}</td>
                     <td>${filteredData[i].cantidad}</td>
                     <td>${filteredData[i].PrecioUnitario}</td>
                     <td>${filteredData[i].proveedor}</td>
@@ -85,6 +86,7 @@ function populateHistorialComprasTable() {
           <thead>
             <tr>
               <th>Material</th>
+              <th>Descripcion</th>
               <th>Cantidad</th>
               <th>Precio Unitario</th>
               <th>Proveedor</th>
@@ -127,6 +129,7 @@ function populateHistorialVentasTable() {
       for (var i = 0; i < filteredData.length; i++) {
         var row = `<tr>
                     <td>${filteredData[i].material}</td>
+                    <td>${filteredData[i].descripcion}</td>
                     <td>${filteredData[i].cantidad}</td>
                     <td>${filteredData[i].PrecioUnitario}</td>
                     <td>${filteredData[i].proveedor}</td>
@@ -141,6 +144,7 @@ function populateHistorialVentasTable() {
           <thead>
             <tr>
               <th>Material</th>
+              <th>Descripcion</th>
               <th>Cantidad</th>
               <th>Precio Unitario</th>
               <th>Proveedor</th>

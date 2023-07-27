@@ -21,39 +21,47 @@ router.get('/getInventoryData', function(req, res, next) {
   });
 });
 
-router.post('/login', function(request, response, next) {
-  var Usuario = request.body.Usuario;
-  var Contraseña = request.body.Contraseña;
+router.post('/login', function(request, response, next){
 
-  if (Usuario && Contraseña) {
-    query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
+    var Usuario = request.body.Usuario;
 
-    database.query(query, function(error, data) {
-      if (data.length > 0) {
-        for (var count = 0; count < data.length; count++) {
-          if (data[count].Contraseña == Contraseña) {
-            request.session.Id = data[count].Id;
-            response.cookie('session_id', data[count].Id, { httpOnly: true }); // Set the session ID as a cookie
-            response.redirect("/");
-            return; // Return to prevent further response
-          }
-        }
-      }
-      response.send('Incorrect Email Address or Password');
-    });
-  } else {
-    response.send('Please Enter Email Address and Password Details');
-  }
-});
+    var Contraseña = request.body.Contraseña;
 
-router.get('/checkLoginStatus', function(req, res, next) {
-  if (req.session.Id) {
-    // User is logged in
-    res.json({ loggedIn: true });
-  } else {
-    // User is not logged in
-    res.json({ loggedIn: false });
-  }
+    if(Usuario && Contraseña)
+    {
+        query = `SELECT * FROM users WHERE Usuario = "${Usuario}"`;
+
+        database.query(query, function(error, data){
+          console.log(data);
+
+            if(data.length > 0)
+            {
+                for(var count = 0; count < data.length; count++)
+                {
+                    if(data[count].Contraseña == Contraseña)
+                    {
+                        request.session.Id = data[count].Id;
+                        response.redirect("/");
+                    }
+                    else
+                    {
+                        response.send('Incorrect Password');
+                    }
+                }
+            }
+            else
+            {
+                response.send('Incorrect Email Address');
+            }
+            response.end();
+        });
+    }
+    else
+    {
+        response.send('Please Enter Email Address and Password Details');
+        response.end();
+    }
+
 });
 
 router.post('/logout', function(request, response, next){
@@ -130,7 +138,7 @@ router.post('/venta', function(request, response, next){
 });
 
 router.get('/getCompras', function(req, res, next) {
-  getCompras = `SELECT m.material, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialcompra c LEFT JOIN material m on m.Id = c.IdMaterial; `;
+  getCompras = `SELECT m.material, m.descrpicion, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialcompra c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getCompras, function(error, comprasData) {
     if (error) {
       console.log(error);
@@ -143,7 +151,7 @@ router.get('/getCompras', function(req, res, next) {
 
 
 router.get('/getVentas', function(req, res, next) {
-  getVentas = `SELECT m.material, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialventa c LEFT JOIN material m on m.Id = c.IdMaterial; `;
+  getVentas = `SELECT m.material, m.descrpicion, c.cantidad, m.PrecioUnitario, c.proveedor, c.fecha FROM historialventa c LEFT JOIN material m on m.Id = c.IdMaterial; `;
   database.query(getVentas, function(error, ventasData) {
     if (error) {
       console.log(error);
