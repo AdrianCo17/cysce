@@ -181,21 +181,16 @@ function generateCSVContent(data) {
   return csvContent;
 }
 
-function ocultarSecciones() {
-  var sections = document.querySelectorAll('section');
-  sections.forEach((section) => {
-    if (section.id !== 'section-inventario') {
-      section.style.display = 'none';
-    }
-  });
+function showInventarioSection() {
+  ocultarSecciones();
+  document.getElementById('section-inventario').style.display = 'block';
 }
 
 function loadInitialData() {
   populateInventoryTable();
   populateHistorialComprasTable();
   populateHistorialVentasTable();
-  ocultarSecciones();
-  document.getElementById('section-inventario').style.display = 'block';
+  showInventarioSection();
 }
 
 window.addEventListener('DOMContentLoaded', loadInitialData);
@@ -382,7 +377,12 @@ btnDescargarVentas.addEventListener('click', function() {
   descargarRegistros('ventas.csv', generarContenidoCSV(historialVentas));
 });
 
-
+function ocultarSecciones() {
+  const secciones = document.getElementsByClassName('section');
+  for (let seccion of secciones) {
+    seccion.style.display = 'none';
+  }
+}
 
 function actualizarInventario() {
   cuerpoInventario.innerHTML = '';
