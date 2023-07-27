@@ -182,10 +182,15 @@ function generateCSVContent(data) {
 }
 
 function showInventarioSection() {
-  ocultarSecciones();
-  document.getElementById('section-inventario').style.display = 'block';
+  const sections = document.querySelectorAll('.section');
+  sections.forEach((section) => {
+    if (section.id === 'section-inventario') {
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
+  });
 }
-
 function loadInitialData() {
   populateInventoryTable();
   populateHistorialComprasTable();
