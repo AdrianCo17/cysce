@@ -98,7 +98,6 @@ router.post('/compra', function(request, response, next)
       database.query(updateMaterial);
       database.query(addHistorialCompras);
     }
-    request.session.Id = data[0].Id;
     response.redirect('/');
   });
 });
@@ -128,7 +127,6 @@ router.post('/venta', function(request, response, next){
         database.query(updateMaterial);
         database.query(addHistorialVenta);
 
-        request.session.Id = data[0].Id;
         response.redirect('/');
       } else {
         response.send(data[0].Cantidad);
